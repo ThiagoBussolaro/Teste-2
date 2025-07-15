@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Eu Te Amo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #0e0e0e;
+      font-family: 'Arial', sans-serif;
+      overflow-x: hidden;
+      color: white;
+    }
+
+    /* Emojis fixos no fundo */
+    .fixed-hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .fixed-heart {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0.05;
+    }
+
+    .fixed-heart:nth-child(1) { top: 5%; left: 10%; }
+    .fixed-heart:nth-child(2) { top: 20%; left: 80%; }
+    .fixed-heart:nth-child(3) { top: 35%; left: 25%; }
+    .fixed-heart:nth-child(4) { top: 50%; left: 60%; }
+    .fixed-heart:nth-child(5) { top: 70%; left: 15%; }
+    .fixed-heart:nth-child(6) { top: 85%; left: 75%; }
+
+    #paginaInicial {
+      position: fixed;
+      width: 100%;
+      height: 100vh;
+      background: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    #paginaInicial h2 {
+      font-size: 2.5em;
+      margin-bottom: 30px;
+    }
+
+    #btnIniciar {
+      background-color: #d6336c;
+      border: none;
+      border-radius: 30px;
+      padding: 15px 40px;
+      font-size: 1.4em;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 10px #d6336caa;
+    }
+
+    #btnIniciar:hover {
+      background-color: #ff4d6d;
+    }
+
+    #btnPlayPause {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-image: url('img7.jpeg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 10px 30px;
+      border: none;
+      border-radius: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+      box-shadow: 0 0 12px #ff4d6d;
+      z-index: 999;
+      text-shadow: 1px 1px 3px black;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .container {
+      text-align: center;
+      padding: 30px;
+      padding-top: 70px;
+    }
+
+    .carousel {
+      width: 80%;
+      max-width: 350px;
+      margin: auto;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      border-radius: 15px;
+      border: 12px solid transparent;
+      box-shadow: 0 0 0 5px #d9b382, inset 0 0 10px 3px rgba(0,0,0,0.3);
+      filter: sepia(0.4) brightness(0.85);
+      transition: transform 0.5s, filter 0.5s;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    .slide:hover {
+      transform: scale(1.05) rotate(2deg);
+      filter: brightness(1.05) drop-shadow(0 0 6px #ff4d6d);
+      cursor: pointer;
+    }
+
+    h1 {
+      font-size: 1.8em;
+      margin-top: 20px;
+    }
+
+    #contador {
+      font-size: 1.2em;
+      color: pink;
+      margin-bottom: 30px;
+    }
+
+    .poema-container {
+      background-color: #f7fbff;
+      border-radius: 20px;
+      padding: 35px;
+      max-width: 750px;
+      margin: 30px auto;
+      color: black;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .poema {
+      font-family: "Bradley Hand ITC", cursive, sans-serif;
+      font-size: 2.2em;
+      white-space: pre-wrap;
+      line-height: 2.2em;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      animation: floatUp 2s ease forwards;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-100px); opacity: 0; }
+    }
+
+    #mensagemSecreta {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5em;
+      color: #ff4d6d;
+      margin-top: 30px;
+      opacity: 0;
+      transition: opacity 2s ease;
+      text-shadow: 0 0 10px #ff4d6d;
+    }
+
+    #mensagemSecreta.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Emojis fixos no fundo -->
+  <div class="fixed-hearts">
+    <div class="fixed-heart">❣️</div>
+    <div class="fixed-heart">❣️</div>
+    <div class="fixed-heart">❣️</div>
+    <div class="fixed-heart">❣️</div>
+    <div class="fixed-heart">❣️</div>
+    <div class="fixed-heart">❣️</div>
+  </div>
+
+  <!-- Tela inicial -->
+  <div id="paginaInicial">
+    <h2>DE: Dengo pouco<br>PARA: Meu denguinho</h2>
+    <button id="btnIniciar">Iniciar ❣️</button>
+  </div>
+
+  <!-- Botão música -->
+  <button id="btnPlayPause">► NOSSA MÚSICA</button>
+
+  <!-- Conteúdo principal -->
+  <div class="container" id="sitePrincipal" style="display:none;">
+    <div class="carousel">
+      <img src="img1.jpg" class="slide active" />
+      <img src="img2.jpg" class="slide" />
+      <img src="img3.jpg" class="slide" />
+      <img src="img4.jpg" class="slide" />
+      <img src="img5.jpg" class="slide" />
+    </div>
+
+    <h1>Eu te amo há:</h1>
+    <div id="contador"></div>
+
+    <div class="poema-container" id="poemaContainer">
+      <div class="poema">
+Teus olhos castanhos… que mundo é esse?
+Que paz me invade quando me esquece
+Do resto, da pressa, do que é vaidade
+Só há em mim tua intensidade.
+
+Neles, eu vejo um lar, um abrigo,
+Um universo calmo, só nosso, contigo.
+Refletem o céu, o amor que é sem fim,
+E tudo faz sentido quando estás pra mim.
+
+Teu cabelo dourado, sol que me aquece,
+Brilha ao vento, encanta, me enobrece.
+Em cada fio, um verso, uma dança,
+De tudo o que é belo, és a esperança.
+
+Tua pele é poema, tua alma é canção,
+Teu toque sereno é minha oração.
+És doce, és firme, és paz no meu caos,
+Amor que completa, sorriso que é bálsamo e sal.
+
+Minha parceira, meu riso e razão,
+Melhor companhia, minha direção.
+A mulher com quem sonho cada dia,
+Futura mãe da nossa alegria.
+
+Te amo, te admiro, em cada detalhe,
+Do teu jeito leve ao que em ti não falhe.
+Com você, sou mais inteiro, feliz 
+E se um dia o mundo parar… 
+fico onde sempre quis.
+
+Eu te amo, minha princesa ❣️
+      </div>
+      <div id="mensagemSecreta">Para sempre juntos ❤️</div>
+    </div>
+  </div>
+
+  <!-- Música -->
+  <audio id="audioPlayer" src="Coldplay - Sparks.mp3" loop autoplay></audio>
+
+  <!-- Scripts -->
+  <script>
+    document.getElementById("btnIniciar").addEventListener("click", () => {
+      document.getElementById("paginaInicial").style.display = "none";
+      document.getElementById("sitePrincipal").style.display = "block";
+    });
+
+    const btn = document.getElementById("btnPlayPause");
+    const audio = document.getElementById("audioPlayer");
+
+    function isPlaying(audio) {
+      return !audio.paused;
+    }
+
+    btn.addEventListener("click", () => {
+      if (isPlaying(audio)) {
+        audio.pause();
+        btn.textContent = "► NOSSA MÚSICA";
+      } else {
+        audio.play();
+        btn.textContent = "❚❚ NOSSA MÚSICA";
+      }
+    });
+
+    audio.onplay = () => btn.textContent = "❚❚ NOSSA MÚSICA";
+    audio.onpause = () => btn.textContent = "► NOSSA MÚSICA";
+
+    // Carrossel
+    let currentIndex = 0;
+    const slides = document.querySelectorAll(".slide");
+    setInterval(() => {
+      slides[currentIndex].classList.remove("active");
+      currentIndex = (currentIndex + 1) % slides.length;
+      slides[currentIndex].classList.add("active");
+    }, 3000);
+
+    // Contador
+    function atualizarContador() {
+      const inicio = new Date("2021-07-09T23:45:00");
+      const agora = new Date();
+      const diff = agora - inicio;
+      const segundos = Math.floor(diff / 1000) % 60;
+      const minutos = Math.floor(diff / 60000) % 60;
+      const horas = Math.floor(diff / 3600000) % 24;
+      const dias = Math.floor(diff / 86400000);
+      const anos = Math.floor(dias / 365);
+      const meses = Math.floor((dias % 365) / 30);
+      const diasRestantes = (dias % 365) % 30;
+
+      document.getElementById("contador").innerText =
+        `${anos} anos, ${meses} meses, ${diasRestantes} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos`;
+
+      requestAnimationFrame(atualizarContador);
+    }
+    atualizarContador();
+
+    // Corações ao clicar no poema
+    document.getElementById("poemaContainer").addEventListener("click", (e) => {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = "❣️";
+      heart.style.left = e.pageX + 'px';
+      heart.style.top = e.pageY + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 2000);
+    });
+
+    // Mostrar mensagem secreta ao fim
+    window.addEventListener("scroll", () => {
+      const mensagem = document.getElementById("mensagemSecreta");
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
+        mensagem.classList.add("show");
+      }
+    });
+  </script>
+</body>
+</html>
